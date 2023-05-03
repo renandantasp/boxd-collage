@@ -1,4 +1,4 @@
-import generateCollage from "./generate_collage/index.js";
+import generateCollage from "./middleware/generate_collage/index.js";
 import express from "express"
 
 
