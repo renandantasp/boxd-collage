@@ -6,9 +6,19 @@ const getFilms = async (user,time) => {
   const url = `https://api.themoviedb.org/3/search/movie?api_key=${process.env.TMDB}&query=`
   // - a visible browser (`headless: false` - easier to debug because you'll see the browser in action)
   const browser = await puppeteer.launch({
-    headless: "new",
+    args: [
+      '--no-sandbox',
+      '--disable-setuid-sandbox',
+      '--single-process',
+      '--no-zygote'
+    ],
+    executablePath: 
+      process.env.NODE_ENV === "production" 
+        ? process.env.EXECUTABLE_PATH
+        : puppeteer.executablePath() 
+    // headless: "new",
     // headless: false,
-    defaultViewport: null,
+    // defaultViewport: null,
   });
 
   const page = await browser.newPage();
