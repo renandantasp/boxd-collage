@@ -20,7 +20,8 @@ export default async function handler(
 
   const films = await Promise.all(
     entries.map(async (entry) => {
-      const day = $(entry).find('.td-day a').attr('href').slice(-11).substring(0, 10).replace(/\//g, '-')
+      const fullDay = $(entry).find('.td-day a').attr('href')
+      const day = (fullDay === undefined ? '' : fullDay.slice(-11).substring(0, 10).replace(/\//g, '-'))
       const date = new Date(day).getTime()
       const film_name = $(entry).find('.headline-3 a').text()
       const rating = $(entry).find('.td-rating div span').text()
