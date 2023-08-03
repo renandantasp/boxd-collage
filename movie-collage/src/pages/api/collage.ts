@@ -18,7 +18,7 @@ export default async function handler(
 
   const size = Number(req.query.size)
   const films = (collage_films.length > size*size) ? collage_films.slice(0,size*size) : collage_films
-  const width = 250
+  const width = 200
   const height = width*1.5
   const font_size = 10
 

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
+import Head from 'next/head';
 
 
 export default function Collage() {
@@ -8,7 +9,6 @@ export default function Collage() {
   const [errorMessage, setErrorMessage] = useState("")
   const router = useRouter();
   const { query } = router;
-  console.log(src)
   const user = query.user;
   const time = query.time;
   const size = query.size;
@@ -44,8 +44,15 @@ export default function Collage() {
   }, [user])
   return (
     <main className="flex min-h-screen bg-[#171a20] flex-col items-center justify-between ">
+        { user ? 
+          <Head>
+            <title>{`${user}'s collage`}</title>
+          </Head>
+          : 
+          <></>
+        }
         { src === '' && error === false ?  
-        
+          
           <div className='flex w-fit flex-col justify-center h-screen items-center'>
             <svg
               aria-hidden='true'
