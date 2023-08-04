@@ -18,7 +18,7 @@ export default async function handler(
 
   const size = Number(req.query.size)
   const films = (collage_films.length > size*size) ? collage_films.slice(0,size*size) : collage_films
-  const width = 200
+  const width = 150
   const height = width*1.5
   const font_size = 10
 
@@ -55,6 +55,6 @@ export default async function handler(
     }
   }
 
-  const dataURL = canvas.toDataURL('image/png');
+  const dataURL = canvas.toDataURL('image/jpeg');
   res.status(200).send({src:dataURL});
 }
