@@ -1,10 +1,11 @@
-import { useState } from 'react'
+import React,{ useState } from 'react'
 import Dropdown from '@/components/dropdown'
 
+
 export default function Home() {
-  const [user, setUser] = useState(null)
-  const [size, setSize] = useState(null)
-  const [time, setTime] = useState(null)
+  const [user, setUser] = useState('')
+  const [size, setSize] = useState('')
+  const [time, setTime] = useState('')
 
   const timeOptions = [
     {value:'1', label:'1 month'},
@@ -19,10 +20,10 @@ export default function Home() {
     {value:'4', label:'4x4'}
   ]
   
-  const changeUser = (e) => {
+  const changeUser = (e : React.ChangeEvent<HTMLInputElement>) => {
     setUser(e.target.value)
   }
-  const isDisabled = ((user === null) ||  (size === null) || (time === null))
+  const isDisabled = ((user === '') ||  (size === '') || (time === ''))
 
   const handleRedirect = () => {
     // Replace 'target-url' with the URL you want to redirect to

@@ -8,7 +8,7 @@ interface Option {
 
 interface Props {
   type : string
-  value : string | null
+  value : string
   changeFunction: Dispatch<SetStateAction<string>>
   options : Option[] 
 }
@@ -35,7 +35,7 @@ export default function Dropdown({type, value, changeFunction, options}: Props){
     <div className="flex flex-col lg:mb-0 mb-4">
       <button onClick={clickButton} className='flex flex-row mr-4'>
         <div className='p-1 h-fit outline-none font-normal rounded-l w-full lg:w-20 items-center flex bg-[#0e1013] '>
-          {value ? <p className='text-[#c2c4c7]'>{label} </p> : <p className='text-[#555c64]'>{type}</p>}
+          {value != '' ? <p className='text-[#c2c4c7]'>{label} </p> : <p className='text-[#555c64]'>{type}</p>}
         </div>
         <div className='px-1 pt-1.5 pb-0.5 font-normal h-fit rounded-r w-8 bg-[#363c44]'>
           { !dropdownButton ? <p className=''>⌄</p> : <p className=''>⌃</p>}
