@@ -1,10 +1,7 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next'
-import axios from 'axios'
 import cheerio from 'cheerio'
-// type Data = {
-//   name: any
-// }
+
 
 export default async function handler(
   req: NextApiRequest,
@@ -13,8 +10,9 @@ export default async function handler(
   
   const url = `https://letterboxd.com/${req.query.user}/films/diary/`
   const poster_api = `https://api.themoviedb.org/3/search/movie?api_key=${process.env.TMDB}&query=`
-  const response  = await axios.get(url)
-  const $ = cheerio.load(response.data)
+  const response  = await fetch(url)
+  const html = await response.text()
+  const $ = cheerio.load(html)
 
   const entries = $('.diary-entry-row').toArray();
 

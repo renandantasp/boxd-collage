@@ -55,7 +55,6 @@ export default async function handler(
     }
   }
 
-  
   const dataURL = canvas.toDataURL('image/png');
   res.status(200).send({src:dataURL});
 }
