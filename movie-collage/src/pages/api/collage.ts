@@ -1,15 +1,23 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { createCanvas, loadImage } from 'canvas';
-import fetch from 'node-fetch';
 
 const width = 200;
 const height = width * 1.5;
 const font_size = 10;
 
-async function loadImageAsync(url) {
+async function loadImageAsync(url:string) {
   const image = await loadImage(url);
   return image;
 }
+
+// Define the interface for the 'film' object
+interface Film {
+  poster_path: string;
+  film_name: string;
+  rating: string;
+  // Add other properties if present in the 'film' object
+}
+
 
 export default async function handler(
   req: NextApiRequest,
@@ -41,7 +49,7 @@ export default async function handler(
   ctx.font = '12px Courier New';
   ctx.lineWidth = 2;
 
-  const filmPromises = films.map(async (film, index) => {
+  const filmPromises = films.map(async (film:Film, index:number) => {
     const image = await loadImageAsync(film.poster_path);
     const i = Math.floor(index / size);
     const j = index % size;
