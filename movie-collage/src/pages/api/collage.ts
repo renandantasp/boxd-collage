@@ -1,21 +1,16 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { createCanvas, loadImage } from 'canvas';
+import puppeteer from "puppeteer";
 
-const width = 200;
+
+
+const width = 250;
 const height = width * 1.5;
 const font_size = 10;
 
-async function loadImageAsync(url:string) {
-  const image = await loadImage(url);
-  return image;
-}
-
-// Define the interface for the 'film' object
 interface Film {
   poster_path: string;
   film_name: string;
   rating: string;
-  // Add other properties if present in the 'film' object
 }
 
 
@@ -40,39 +35,46 @@ export default async function handler(
   const size = Number(req.query.size);
   const films = collage_films.slice(0, size * size);
 
-  const canvas = createCanvas(width * size, height * size);
-  const ctx = canvas.getContext('2d');
-
-  ctx.fillStyle = 'black';
-  ctx.fillRect(0, 0, width * size, height * size);
-  ctx.fillStyle = 'white';
-  ctx.font = '12px Courier New';
-  ctx.lineWidth = 2;
-
-  const filmPromises = films.map(async (film:Film, index:number) => {
-    const image = await loadImageAsync(film.poster_path);
+  var html = `<html>
+  <div style="display:flex; flex-direction: row; align-items: flex-start; width:${size*width};height:${size*height}; flex-wrap: wrap; padding: 0px; margin: 0px; background:black">`
+  
+  const content =  films.map((film:Film, index:number) =>{
     const i = Math.floor(index / size);
-    const j = index % size;
+    html = html + 
+    `<div style="width: ${width}px;padding: 0px;margin: 0px;">
+    <div style="position:absolute; top:${(height*i)+8}px">
+      <img width="${width}px"  src="${film.poster_path}" alt=${film.film_name}/>
+    </div>
+    <div style="width: ${width}px; background-image: linear-gradient(to bottom, #00000077, transparent); height: 200px; position:absolute; top:${(height*i)+8}px">
+      <p style="color: white; margin:0;padding-top:5px;padding-left:5px;padding-bottom:0px; font-family: monospace;">${film.film_name}</p>
+      <p style="color: #00e054; vertical-align:top; margin:0;padding-left:3px;padding-top:0px">${film.rating}</p>
+    </div>
+  </div>`
+  })
 
-    ctx.drawImage(image, width * j, height * i, width, height);
+  html = html + "</div></html>"
 
-    const grd = ctx.createLinearGradient(0, i * height, 0, i * height + height);
-    grd.addColorStop(0, '#00000070');
-    grd.addColorStop(0.25, 'transparent');
-    grd.addColorStop(1, 'transparent');
 
-    ctx.fillStyle = grd;
-    ctx.fillRect(width * j, height * i, width, height);
+  const browser = await puppeteer.launch({
+    headless: "new",
+  });
+  const page = await browser.newPage();
 
-    ctx.fillStyle = 'white';
-    ctx.fillText(film.film_name, width * j + 5, height * i + font_size + 5, width);
+  await page.setContent(html);
 
-    ctx.fillStyle = '#00e054';
-    ctx.fillText(film.rating, width * j - 4, height * i + font_size * 2.25 + 5, width);
+  const screenshot = await page.screenshot({
+    type: 'png', // or 'jpeg'
+    encoding: 'base64',
+    clip: {
+      x: 10,
+      y: 10,
+      width: (width*size)-10,
+      height: (height*size)-10,
+    },
   });
 
-  await Promise.all(filmPromises);
+  await page.close();
+  await browser.close();
 
-  const dataURL = canvas.toDataURL('image/png');
-  res.status(200).send({ src: dataURL });
+  res.status(200).send({src:`data:image/png;base64,${screenshot}`})
 }
