@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import puppeteer from "puppeteer";
+import puppeteer from "puppeteer-core";
 
 
 
@@ -55,9 +55,9 @@ export default async function handler(
   html = html + "</div></html>"
 
 
-  const browser = await puppeteer.launch({
-    headless: "new",
-  });
+  const browser = await puppeteer.connect({ 
+    browserWSEndpoint: `wss://chrome.browserless.io?token=${process.env.browserlessKey}` 
+  })
   const page = await browser.newPage();
 
   await page.setContent(html);
