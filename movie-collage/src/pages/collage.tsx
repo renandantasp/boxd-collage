@@ -13,11 +13,16 @@ export default function Collage() {
   const time = query.time;
   const size = query.size;
 
+  const mainUrl =
+    process.env.enviroment === 'production'
+      ? process.env.productionUrl
+      : process.env.devUrl;
+
   useEffect(() => {
     async function getSrc(){
       try{
 
-        const response = await fetch(`http://localhost:3000/api/collage?user=${user}&time=${time}&size=${size}`)
+        const response = await fetch(`${mainUrl}api/collage?user=${user}&time=${time}&size=${size}`)
         if (!response.ok) {
           throw new Error(response.statusText);
         }
