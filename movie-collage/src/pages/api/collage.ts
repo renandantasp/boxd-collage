@@ -55,17 +55,15 @@ export default async function handler(
   html = html + "</div></html>"
 
 
-  const browser = await puppeteer.launch()
-  
-  // connect({ 
-  //   browserWSEndpoint: `wss://chrome.browserless.io?token=${process.env.browserlessKey}` 
-  // })
+  const browser = await puppeteer.connect({ 
+    browserWSEndpoint: `wss://chrome.browserless.io?token=${process.env.browserlessKey}` 
+  })
   const page = await browser.newPage();
 
   await page.setContent(html);
 
   const screenshot = await page.screenshot({
-    type: 'png', // or 'jpeg'
+    type: 'png',
     encoding: 'base64',
     clip: {
       x: 10,
