@@ -39,8 +39,8 @@ export default function Home() {
 
         <div className='flex flex-col lg:mb-8 mb-0 lg:flex-row '>
           <input className='p-2 h-fit w-60 outline-none font-normal lg:mb-0 mb-4 rounded-sm text-[#0e1013] mx-2' placeholder='Letterboxd username' value={user} onChange={changeUser}/>
-          <Dropdown className='mx-2 mb-4 lg:mb-0 w-60' value={size} onChange={(e)=>setSize(e)} options={sizeOptions}/>
-          <Dropdown className='mx-2 mb-4 lg:mb-0 w-60' value={time} onChange={(e)=>setTime(e)} options={timeOptions}/>
+          <Dropdown className='mx-2 mb-4 lg:mb-0 w-60' value={size} onChange={(e)=>setSize({label:(e.label as string), value:e.value})} options={sizeOptions}/>
+          <Dropdown className='mx-2 mb-4 lg:mb-0 w-60' value={time} onChange={(e)=>setTime({label:(e.label as string), value:e.value})} options={timeOptions}/>
         </div>
 
         <button 
